@@ -1,0 +1,5 @@
+/**
+ * @license Matt Voget v1.0.0
+ * (c) 2017 Matt Voget https://github.com/The-Lando-System/sarlacc-angular-client
+ * License: MIT
+ */
