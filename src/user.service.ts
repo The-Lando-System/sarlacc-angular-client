@@ -39,8 +39,8 @@ export class UserService {
 
     return new Promise<{}>((resolve, reject) => {
 
-      if (this.user && this.user.token){
-        console.debug(this.TAG + 'User and token are already set.');
+      if (this.user && this.user.token && this.user.appRoles){
+        console.debug(this.TAG + 'User, token, and app roles are already set.');
         resolve(this.user);
       }
 
@@ -52,10 +52,8 @@ export class UserService {
         .then((user:User) => {
 
           console.debug(this.TAG + 'Attempting to get user app roles');
-          this.getUserAppRoles(user.username, user.token.access_token)
+          this.getUserAppRoles(user.username, token.access_token)
           .then((appRoles:AppRole[]) => {
-            console.debug(this.TAG + 'Setting the following app roles for user: ');
-            console.debug(appRoles);
 
             this.user = user;
             this.user.token = token;
@@ -70,7 +68,6 @@ export class UserService {
             console.info(this.TAG + 'Initialization complete. No user logged in');
             reject();
           });
-
 
         }).catch((error:any) => {
           this.logout();
@@ -101,14 +98,14 @@ export class UserService {
 
 
           console.debug(this.TAG + 'Attempting to get user app roles');
-          this.getUserAppRoles(user.username, user.token.access_token)
+          this.getUserAppRoles(user.username, token.access_token)
           .then((appRoles:AppRole[]) => {
-
-            console.info(this.TAG + 'Login successful');
 
             this.user = user;
             this.user.token = token;
             this.user.appRoles = appRoles;
+
+            console.info(this.TAG + 'Login successful');
 
             this.broadcastLogin('User ' + this.user.username + ' has logged in!');
             
@@ -148,24 +145,8 @@ export class UserService {
     });
   }
 
-  getUserHeaders(accessToken:string): Headers {
-    return new Headers({
-      'Authorization'  : 'Bearer ' + accessToken
-    });
-  }
-
-  getTokenFromCookie(): Token {
-    console.debug(this.TAG + 'Checking if the browser has the access-token cookie');
-    var access_token = this.cookieService.get('access-token');
-    if (access_token) {
-      console.debug(this.TAG + 'Found the following value in the access-token cookie: ' + access_token);
-      var token: Token = new Token();
-      token.access_token = access_token;
-      return token;
-    } else {
-      console.debug(this.TAG + 'No access-token cookie found');
-      return null;
-    }
+  getUserAuthHeaders(): Headers {
+    return this.getUserHeaders(this.user.token.access_token);
   }
 
   removeTokenFromCookie(): void {
@@ -243,12 +224,32 @@ export class UserService {
     this.broadcaster.broadcast(this.LOGOUT_BCAST,message);
   }
 
+  private getUserHeaders(accessToken:string): Headers {
+    return new Headers({
+      'Authorization'  : 'Bearer ' + accessToken
+    });
+  }
+
   private getTokenHeaders(): Headers {
     return new Headers({
       'Content-Type'   : 'application/x-www-form-urlencoded',
       'Authorization'  : 'Basic ' + btoa('sarlacc:deywannawanga')
     });
   } 
+
+  private getTokenFromCookie(): Token {
+    console.debug(this.TAG + 'Checking if the browser has the access-token cookie');
+    var access_token = this.cookieService.get('access-token');
+    if (access_token) {
+      console.debug(this.TAG + 'Found the following value in the access-token cookie: ' + access_token);
+      var token: Token = new Token();
+      token.access_token = access_token;
+      return token;
+    } else {
+      console.debug(this.TAG + 'No access-token cookie found');
+      return null;
+    }
+  }
 
   private getUserAppRoles(username:string, accessToken:string): Promise<AppRole[]> {
     return new Promise<{}>((resolve, reject) => {
