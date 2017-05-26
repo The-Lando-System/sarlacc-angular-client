@@ -13,6 +13,9 @@
   "files": [
     "index.ts"
   ],
+  "include": [
+    "test/*"
+  ],
   "typeRoots": [
     "../node_modules/@types"
   ]
