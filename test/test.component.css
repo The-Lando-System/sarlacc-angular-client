@@ -1,0 +1,38 @@
+.inverse-color {
+    color: white;
+}
+
+.navbar-brand:hover {
+    color: white;
+}
+
+#user-title {
+  color: white;
+  margin-right: 30px;
+}
+
+.in-line {
+  display: inline-block;
+}
+
+.modal-spinner {
+  margin-top: -20px;
+}
+
+.row {
+  margin-top:70px;
+}
+
+.spacer {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#login-card {
+  height: 250px;
+}
+
+.card {
+  max-height: 250px;
+  overflow: auto;
+}

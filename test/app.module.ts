@@ -7,6 +7,9 @@ import { CookieService } from 'angular2-cookie/services/cookies.service';
 
 import { TestComponent } from './test.component';
 
+import { UserService } from '../src/user.service';
+import { Broadcaster } from '../src/broadcaster';
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -14,7 +17,7 @@ import { TestComponent } from './test.component';
     HttpModule
   ],
   declarations: [ TestComponent ],
-  providers: [ CookieService ],
+  providers: [ CookieService, UserService, Broadcaster ],
   bootstrap: [ TestComponent ]
 })
 export class AppModule { }
