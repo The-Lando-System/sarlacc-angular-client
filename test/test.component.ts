@@ -12,16 +12,11 @@ import { User } from '../src/user';
 })
 export class TestComponent implements OnInit {
 
-  welcome = 'Test';
+  private outputTitle:string;
+  private outputData:string;
 
-  user: User;
-  userDetails = "";
-  creds = {};
-  returnedUser = "";
-
-  loginLoading = false;
-  
-  errorMessage = '';
+  private loading:boolean = false;
+  private creds:any = {};
 
   constructor(
     private userService: UserService
@@ -31,29 +26,21 @@ export class TestComponent implements OnInit {
     this.logout();
   }
 
-  getUser(): void {
-    this.userService.returnUser()
-    .then((user:User) => {
-      console.log(user);
-    }).catch((err:any) => {
-      this.errorMessage = JSON.stringify(err, null, '  ');
-    })
-  }
-
   login(): void {
     event.preventDefault();
-    this.loginLoading = true;
-    this.errorMessage = '';
+    this.loading = true;
 
     this.userService.login(this.creds)
     .then((user:any) => {
-      this.user = user;
-      this.userDetails = JSON.stringify(user, null, '  ');
-      this.loginLoading = false;
+
+      this.outputTitle = 'Login Success! Returned User Details:'
+      this.outputData = JSON.stringify(user, null, '  ');
+
+      this.loading = false;
       this.creds = {};
     }).catch((err:any) => {
-      this.loginLoading = false;
-      this.errorMessage = JSON.stringify(err, null, '  ');
+      this.loading = false;
+      this.createError(JSON.stringify(err, null, '  '));
     });
   }
 
@@ -61,27 +48,37 @@ export class TestComponent implements OnInit {
     event.preventDefault();
     this.clearState();
     this.userService.logout();
-    this.user = null;
   }
 
   returnUser(): void {
     event.preventDefault();
 
+    this.loading = true;
+
     this.userService.returnUser()
     .then((user:User) => {
-      this.returnedUser = JSON.stringify(user, null, '  ');
+
+      this.outputTitle = 'Return User Success! Returned User Details:'
+      this.outputData = JSON.stringify(user, null, '  ');
+      
+      this.loading = false;
+
     }).catch((err:any) => {
-      this.errorMessage = JSON.stringify(err, null, '  ');
+      this.createError(JSON.stringify(err, null, '  '));
+      this.loading = false;
     });
 
   }
 
   clearState(): void {
-    this.user = null;
-    this.userDetails = '';
-    this.returnedUser = '';
-    this.errorMessage = '';
-    this.loginLoading = false;
+    this.outputTitle = 'Output Title';
+    this.outputData = 'Output Details';
+    this.loading = false;
+  }
+
+  private createError(details:string): void {
+    this.outputTitle = "Error!";
+    this.outputData = details;
   }
 
 }

@@ -28,11 +28,7 @@
   margin-bottom: 10px;
 }
 
-#login-card {
-  height: 250px;
-}
-
-.card {
-  max-height: 250px;
+.output-card {
+  max-height: 600px;
   overflow: auto;
 }

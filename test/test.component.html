@@ -1,56 +1,51 @@
 <nav class="navbar navbar-toggleable-sm navbar-light bg-inverse">
-  <div class="container">
-    <span class="navbar-brand inverse-color">Sarlacc Angular Client Test</span>
-  </div>
+    <span style="margin-left:50px;" class="navbar-brand inverse-color">Sarlacc Angular Client Test</span>
 </nav>
-<div class="container" style="margin-top: 30px;">
-    <div *ngIf="errorMessage" class="row">
-        <div class="col-md-4">
-            <div class="alert alert-danger" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                {{errorMessage}}
+<div class="row" style="margin: 50px;">
+
+    <!-- Test Actions -->
+    <div class="col-md-4">
+
+        <!-- Login -->
+        <div class="col-md-12">
+            <div class="card card-block">
+                <h4>Login</h4>
+                <form (ngSubmit)="login()" #loginForm="ngForm">
+                    <input class="form-control spacer" placeholder="username" [(ngModel)]="creds.username" name="username" [disabled]="loginLoading" required />
+                    <input class="form-control spacer" placeholder="password" type="password" [(ngModel)]="creds.password" name="password" [disabled]="loginLoading" required />
+                    <div *ngIf="!loginLoading">
+                        <button type="submit" class="btn btn-primary spacer" [disabled]="!loginForm.form.valid || loginLoading">Login</button>
+                    </div>
+                    <div *ngIf="loginLoading" style="text-align: center">
+                        <i class="fa fa-spinner fa-spin fa-3x" aria-hidden="true"></i>
+                    </div>
+                </form>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div id="login-card" class="card card-block">
-            <h4>Login</h4>
-            <form (ngSubmit)="login()" #loginForm="ngForm">
-                <input class="form-control spacer" placeholder="username" [(ngModel)]="creds.username" name="username" [disabled]="loginLoading" required />
-                <input class="form-control spacer" placeholder="password" type="password" [(ngModel)]="creds.password" name="password" [disabled]="loginLoading" required />
-                <div *ngIf="!loginLoading">
-                    <button type="submit" class="btn btn-primary spacer" [disabled]="!loginForm.form.valid || loginLoading">Login</button>
-                </div>
-                <div *ngIf="loginLoading" style="text-align: center">
-                    <i class="fa fa-spinner fa-spin fa-3x" aria-hidden="true"></i>
-                </div>
-            </form>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div *ngIf="user" class="card card-block">
-                <h4>{{user.username}} - Details:</h4>
-                <pre>{{userDetails}}</pre>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
+
+        <!-- Return User -->
+        <div class="col-md-12" style="margin-top:20px;">
             <button class="btn btn-secondary" (click)="returnUser()">Return User</button>
         </div>
-        <div class="col-md-6" *ngIf="returnedUser">
-            <div *ngIf="user" class="card card-block">
-                <h4>User Details after return: </h4>
-                <pre>{{returnedUser}}</pre>
+
+        <!-- Logout -->
+        <div class="col-md-12" style="margin-top:20px;">
+            <button class="btn btn-secondary" (click)="logout()">Logout</button>
+        </div>
+
+    </div>
+
+    <!-- Outputs -->
+    <div class="col-md-8">
+        <div class="card card-block output-card">
+            <div *ngIf="loading" style="margin:auto">
+                <i class="fa fa-circle-o-notch fa-spin fa-5x fa-fw"></i>
+            </div>
+            <div *ngIf="!loading">
+                <h4>{{outputTitle}}</h4>
+                <pre>{{outputData}}</pre>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-6">
-            <button class="btn btn-secondary" (click)="logout()">Logout</button>
-        </div>
-    </div>
+
 </div>
