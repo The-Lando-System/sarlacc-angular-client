@@ -4,9 +4,17 @@
   </div>
 </nav>
 <div class="container" style="margin-top: 30px;">
+    <div *ngIf="errorMessage" class="row">
+        <div class="col-md-4">
+            <div class="alert alert-danger" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{errorMessage}}
+            </div>
+        </div>
+    </div>
     <div class="row">
-
-        <!-- Login -->
         <div class="col-md-6">
             <div id="login-card" class="card card-block">
             <h4>Login</h4>
@@ -14,14 +22,10 @@
                 <input class="form-control spacer" placeholder="username" [(ngModel)]="creds.username" name="username" [disabled]="loginLoading" required />
                 <input class="form-control spacer" placeholder="password" type="password" [(ngModel)]="creds.password" name="password" [disabled]="loginLoading" required />
                 <div *ngIf="!loginLoading">
-                <button type="submit" class="btn btn-primary spacer" [disabled]="!loginForm.form.valid || loginLoading">Login</button>
-                <div *ngIf="errorMessage" class="alert alert-danger spacer">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <strong>Error!</strong> {{errorMessage}}
-                </div>
+                    <button type="submit" class="btn btn-primary spacer" [disabled]="!loginForm.form.valid || loginLoading">Login</button>
                 </div>
                 <div *ngIf="loginLoading" style="text-align: center">
-                <i class="fa fa-spinner fa-spin fa-3x" aria-hidden="true"></i>
+                    <i class="fa fa-spinner fa-spin fa-3x" aria-hidden="true"></i>
                 </div>
             </form>
             </div>
@@ -34,7 +38,18 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6">
+            <button class="btn btn-secondary" (click)="returnUser()">Return User</button>
+        </div>
+        <div class="col-md-6" *ngIf="returnedUser">
+            <div *ngIf="user" class="card card-block">
+                <h4>User Details after return: </h4>
+                <pre>{{returnedUser}}</pre>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
             <button class="btn btn-secondary" (click)="logout()">Logout</button>
         </div>
     </div>

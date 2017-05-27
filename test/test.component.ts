@@ -17,6 +17,7 @@ export class TestComponent implements OnInit {
   user: User;
   userDetails = "";
   creds = {};
+  returnedUser = "";
 
   loginLoading = false;
   
@@ -35,7 +36,7 @@ export class TestComponent implements OnInit {
     .then((user:User) => {
       console.log(user);
     }).catch((err:any) => {
-      console.log(err);
+      this.errorMessage = JSON.stringify(err, null, '  ');
     })
   }
 
@@ -50,17 +51,37 @@ export class TestComponent implements OnInit {
       this.userDetails = JSON.stringify(user, null, '  ');
       this.loginLoading = false;
       this.creds = {};
-    }).catch((error:any) => {
-      console.log(error);
+    }).catch((err:any) => {
       this.loginLoading = false;
-      this.errorMessage = error;
+      this.errorMessage = JSON.stringify(err, null, '  ');
     });
   }
 
   logout(): void {
     event.preventDefault();
+    this.clearState();
     this.userService.logout();
     this.user = null;
+  }
+
+  returnUser(): void {
+    event.preventDefault();
+
+    this.userService.returnUser()
+    .then((user:User) => {
+      this.returnedUser = JSON.stringify(user, null, '  ');
+    }).catch((err:any) => {
+      this.errorMessage = JSON.stringify(err, null, '  ');
+    });
+
+  }
+
+  clearState(): void {
+    this.user = null;
+    this.userDetails = '';
+    this.returnedUser = '';
+    this.errorMessage = '';
+    this.loginLoading = false;
   }
 
 }
