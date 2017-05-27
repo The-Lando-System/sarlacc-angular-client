@@ -13,24 +13,28 @@
                 <form (ngSubmit)="login()" #loginForm="ngForm">
                     <input class="form-control spacer" placeholder="username" [(ngModel)]="creds.username" name="username" [disabled]="loginLoading" required />
                     <input class="form-control spacer" placeholder="password" type="password" [(ngModel)]="creds.password" name="password" [disabled]="loginLoading" required />
-                    <div *ngIf="!loginLoading">
-                        <button type="submit" class="btn btn-primary spacer" [disabled]="!loginForm.form.valid || loginLoading">Login</button>
-                    </div>
-                    <div *ngIf="loginLoading" style="text-align: center">
-                        <i class="fa fa-spinner fa-spin fa-3x" aria-hidden="true"></i>
-                    </div>
+                    <button type="submit" class="btn btn-primary spacer" [disabled]="!loginForm.form.valid || loginLoading">Login</button>
                 </form>
             </div>
         </div>
 
-        <!-- Return User -->
+        <!-- User Manipulation -->
         <div class="col-md-12" style="margin-top:20px;">
-            <button class="btn btn-secondary" (click)="returnUser()">Return User</button>
+            <div class="card card-block">
+                <h4>User Manipulation Tests</h4>
+                <button class="btn btn-secondary test-button" (click)="returnUser()">Return User</button>
+                <button class="btn btn-secondary test-button" (click)="clearUser()">Clear User</button>
+                <button class="btn btn-secondary test-button" (click)="logout()">Logout</button>
+            </div>
         </div>
 
-        <!-- Logout -->
+        <!-- Header and Cookies Tests -->
         <div class="col-md-12" style="margin-top:20px;">
-            <button class="btn btn-secondary" (click)="logout()">Logout</button>
+            <div class="card card-block">
+                <h4>Headers and Cookies Tests</h4>
+                <button class="btn btn-secondary test-button" (click)="getAuthHeaders()">Get Auth Headers</button>
+                <button class="btn btn-secondary test-button" (click)="getTokenFromCookie()">Get Token From Cookies</button>
+            </div>
         </div>
 
     </div>

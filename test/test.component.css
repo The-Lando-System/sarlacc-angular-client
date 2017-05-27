@@ -32,3 +32,8 @@
   max-height: 600px;
   overflow: auto;
 }
+
+.test-button {
+  max-width:50%;
+  margin-top:10px;
+}

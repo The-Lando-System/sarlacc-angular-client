@@ -26,6 +26,8 @@ export class TestComponent implements OnInit {
     this.logout();
   }
 
+  // Public Methods =================================================
+
   login(): void {
     event.preventDefault();
     this.loading = true;
@@ -63,14 +65,36 @@ export class TestComponent implements OnInit {
       
       this.loading = false;
 
-    }).catch((err:any) => {
-      this.createError(JSON.stringify(err, null, '  '));
+    }).catch(() => {
+
+      this.outputTitle = 'Return User:';
+      this.outputData = 'User is not logged in, so details could not be retrieved';
       this.loading = false;
     });
 
   }
 
-  clearState(): void {
+  getAuthHeaders(): void {
+    let headers:any = this.userService.getAuthHeaders();
+    this.outputTitle = 'Get Auth Headers:'
+    this.outputData = headers ? JSON.stringify(headers, null, '  ') : 'Failed to get Auth Headers. Try logging in first.';
+  }
+
+  clearUser(): void {
+    this.userService.clearUser();
+    this.outputTitle = 'Clear User:'
+    this.outputData = 'User was cleared from user service';
+  }
+
+  getTokenFromCookie(): void {
+    let accessToken = this.userService.getTokenFromCookie();
+    this.outputTitle = 'Get Token From Cookies:'
+    this.outputData = accessToken ? 'access-token: ' + accessToken : 'No access token found in the cookies';
+  }
+
+  // Private Methods =========================================
+
+  private clearState(): void {
     this.outputTitle = 'Output Title';
     this.outputData = 'Output Details';
     this.loading = false;
@@ -78,7 +102,7 @@ export class TestComponent implements OnInit {
 
   private createError(details:string): void {
     this.outputTitle = "Error!";
-    this.outputData = details;
+    this.outputData = "Message from user service:\n" + details;
   }
 
 }

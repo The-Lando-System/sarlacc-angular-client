@@ -44,15 +44,20 @@ export class UserService {
         resolve(this.user);
       }
 
-      let token = this.getTokenFromCookie();
+      let accessToken = this.getTokenFromCookie();
 
-      if (token) {
+      if (accessToken) {
+
+        // TODO: use this access token to get token details
+        let token: Token = new Token();
+        token.access_token = accessToken;
+
         console.debug(this.TAG + 'Attempting to get user details with the access token');
-        this.retrieveUser(token)
+        this.retrieveUser(accessToken)
         .then((user:User) => {
 
           console.debug(this.TAG + 'Attempting to get user app roles');
-          this.getUserAppRoles(user.username, token.access_token)
+          this.getUserAppRoles(user.username, accessToken)
           .then((appRoles:AppRole[]) => {
 
             this.user = user;
@@ -93,7 +98,7 @@ export class UserService {
         this.putTokenInCookie(token);
 
         console.debug(this.TAG + 'Attempting to get user details with the access token');
-        this.retrieveUser(token)
+        this.retrieveUser(token.access_token)
         .then((user:User) => {
 
 
@@ -139,14 +144,34 @@ export class UserService {
   }
 
   getAuthHeaders(): Headers {
-    return new Headers({
-      'Content-Type'   : 'application/json',
-      'x-access-token'  : this.user.token.access_token
-    });
+    if (this.user && this.user.token) {
+      return new Headers({
+        'Content-Type'   : 'application/json',
+        'x-access-token'  : this.user.token.access_token
+      });
+    } else {
+      return null;
+    }
   }
 
   getUserAuthHeaders(): Headers {
-    return this.getUserHeaders(this.user.token.access_token);
+    if (this.user && this.user.token) {
+      return this.getUserHeaders(this.user.token.access_token);
+    } else {
+      return null;
+    }
+  }
+
+  getTokenFromCookie(): string {
+    console.debug(this.TAG + 'Checking if the browser has the access-token cookie');
+    var access_token = this.cookieService.get('access-token');
+    if (access_token) {
+      console.debug(this.TAG + 'Found the following value in the access-token cookie: ' + access_token);
+      return access_token;
+    } else {
+      console.debug(this.TAG + 'No access-token cookie found');
+      return null;
+    }
   }
 
   removeTokenFromCookie(): void {
@@ -158,12 +183,17 @@ export class UserService {
     console.debug(this.TAG + 'Putting the following value in the access-token cookie: ' + token.access_token);
     this.cookieService.put('access-token',token.access_token);
   }
+
+  clearUser(): void {
+    console.debug(this.TAG + 'Clearing the user!');
+    this.user = null;
+  }
   
   // Private Methods ================================================
 
-  private retrieveUser(token:Token): Promise<User> {
+  private retrieveUser(accessToken:string): Promise<User> {
     return new Promise<{}>((resolve, reject) => {
-      this.http.post(this.userUrl, {}, {headers: this.getUserHeaders(token.access_token)})
+      this.http.post(this.userUrl, {}, {headers: this.getUserHeaders(accessToken)})
         .toPromise()
         .then((res:any) => {
           var user = res.json();
@@ -172,7 +202,7 @@ export class UserService {
           resolve(user);
         }).catch((res:any) => {
           var error = res.json();
-          console.warn(this.TAG + 'Failed to retrieve a user with access token: ' + token.access_token);
+          console.warn(this.TAG + 'Failed to retrieve a user with access token: ' + accessToken);
           console.debug(this.TAG + 'Error from the server: ' + JSON.stringify(error));
           reject(this.resolveError(error));
         });
@@ -236,20 +266,6 @@ export class UserService {
       'Authorization'  : 'Basic ' + btoa('sarlacc:deywannawanga')
     });
   } 
-
-  private getTokenFromCookie(): Token {
-    console.debug(this.TAG + 'Checking if the browser has the access-token cookie');
-    var access_token = this.cookieService.get('access-token');
-    if (access_token) {
-      console.debug(this.TAG + 'Found the following value in the access-token cookie: ' + access_token);
-      var token: Token = new Token();
-      token.access_token = access_token;
-      return token;
-    } else {
-      console.debug(this.TAG + 'No access-token cookie found');
-      return null;
-    }
-  }
 
   private getUserAppRoles(username:string, accessToken:string): Promise<AppRole[]> {
     return new Promise<{}>((resolve, reject) => {
