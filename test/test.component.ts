@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { UserService } from '../src/user.service';
 import { User } from '../src/user';
+import { Token } from '../src/token';
 
 @Component({
   moduleId: module.id,
@@ -74,10 +75,34 @@ export class TestComponent implements OnInit {
 
   }
 
+  getAppRoles(): void {
+    let appRoles = this.userService.getAppRoles();
+    this.outputTitle = 'Get App Roles:'
+    this.outputData = appRoles ? JSON.stringify(appRoles, null, '  ') : 'Failed to get App Roles. Try logging in first.';
+  }
+
+  getRoleForApp(appName:string): void {
+    let role = this.userService.getRoleForApp(appName);
+    this.outputTitle = 'Get Role for App [' + appName + ']:';
+    this.outputData = role ? 'Role: ' + role : 'Failed to find a role for given App Name.';
+  }
+
+  isAdminForApp(appName:string): void {
+    let isAdmin = this.userService.isAdminForApp(appName);
+    this.outputTitle = 'Is Admin for App [' + appName + ']:';
+    this.outputData = 'Answer: ' + isAdmin;
+  }
+
   getAuthHeaders(): void {
     let headers:any = this.userService.getAuthHeaders();
     this.outputTitle = 'Get Auth Headers:'
     this.outputData = headers ? JSON.stringify(headers, null, '  ') : 'Failed to get Auth Headers. Try logging in first.';
+  }
+
+  getUserAuthHeaders(): void {
+    let headers:any = this.userService.getUserAuthHeaders();
+    this.outputTitle = 'Get User Auth Headers:'
+    this.outputData = headers ? JSON.stringify(headers, null, '  ') : 'Failed to get User Auth Headers. Try logging in first.';
   }
 
   clearUser(): void {
@@ -91,6 +116,20 @@ export class TestComponent implements OnInit {
     this.outputTitle = 'Get Token From Cookies:'
     this.outputData = accessToken ? 'access-token: ' + accessToken : 'No access token found in the cookies';
   }
+
+  putTokenInCookie(): void {
+    let token:Token = new Token();
+    token.access_token = 'test-access-token-value';
+    token.refresh_token = 'test-refresh-token-value';
+    this.userService.putTokenInCookie(token);
+    this.getTokenFromCookie();
+  }
+
+  removeTokenFromCookie(): void {
+    let accessToken = this.userService.removeTokenFromCookie();
+    this.getTokenFromCookie();
+  }
+
 
   // Private Methods =========================================
 

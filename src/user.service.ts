@@ -188,6 +188,31 @@ export class UserService {
     console.debug(this.TAG + 'Clearing the user!');
     this.user = null;
   }
+
+  getAppRoles(): AppRole[] {
+    if (this.user && this.user.appRoles) {
+      return this.user.appRoles;
+    } else {
+      return null;
+    }
+  }
+
+  getRoleForApp(appName:string): string {
+    if (this.user && this.user.appRoles) {
+      for (let appRole of this.user.appRoles){
+        if (appRole.appName === appName){
+          return appRole.role;
+        }
+      }
+      return null;
+    } else {
+      return null;
+    }
+  }
+
+  isAdminForApp(appName:string): boolean {
+    return (this.getRoleForApp(appName) === 'ADMIN');
+  }
   
   // Private Methods ================================================
 

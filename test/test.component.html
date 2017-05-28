@@ -11,35 +11,63 @@
             <div class="card card-block">
                 <h4>Login</h4>
                 <form (ngSubmit)="login()" #loginForm="ngForm">
-                    <input class="form-control spacer" placeholder="username" [(ngModel)]="creds.username" name="username" [disabled]="loginLoading" required />
-                    <input class="form-control spacer" placeholder="password" type="password" [(ngModel)]="creds.password" name="password" [disabled]="loginLoading" required />
+                    <input class="form-control spacer" placeholder="username" [(ngModel)]="creds.username" name="username"  required />
+                    <input class="form-control spacer" placeholder="password" type="password" [(ngModel)]="creds.password" name="password" required />
                     <button type="submit" class="btn btn-primary spacer" [disabled]="!loginForm.form.valid || loginLoading">Login</button>
                 </form>
             </div>
         </div>
 
-        <!-- User Manipulation -->
+        <!-- User Tests -->
         <div class="col-md-12" style="margin-top:20px;">
             <div class="card card-block">
-                <h4>User Manipulation Tests</h4>
+                <h4>User Tests</h4>
                 <button class="btn btn-secondary test-button" (click)="returnUser()">Return User</button>
                 <button class="btn btn-secondary test-button" (click)="clearUser()">Clear User</button>
                 <button class="btn btn-secondary test-button" (click)="logout()">Logout</button>
             </div>
         </div>
 
-        <!-- Header and Cookies Tests -->
+        <!-- App Role Tests -->
         <div class="col-md-12" style="margin-top:20px;">
             <div class="card card-block">
-                <h4>Headers and Cookies Tests</h4>
-                <button class="btn btn-secondary test-button" (click)="getAuthHeaders()">Get Auth Headers</button>
-                <button class="btn btn-secondary test-button" (click)="getTokenFromCookie()">Get Token From Cookies</button>
+                <h4>App Role Tests</h4>
+                <button class="btn btn-secondary test-button" (click)="getAppRoles()">Get All App Roles</button>
+                <div class="input-group spacer">
+                    <span class="input-group-btn">
+                        <button (click)="getRoleForApp(appName)" class="btn btn-secondary" type="button">Get Role For App</button>
+                    </span>
+                    <input type="text" class="form-control" placeholder="App Name" [(ngModel)]="appName" name="appName">
+                    <span class="input-group-btn">
+                        <button (click)="isAdminForApp(appName)" class="btn btn-secondary" type="button">Is Admin?</button>
+                    </span>
+                </div>
             </div>
         </div>
 
+        <!-- Header Tests -->
+        <div class="col-md-12" style="margin-top:20px;">
+            <div class="card card-block">
+                <h4>Header Tests</h4>
+                <button class="btn btn-secondary test-button" (click)="getAuthHeaders()">Get Auth Headers</button>
+                <button class="btn btn-secondary test-button" (click)="getUserAuthHeaders()">Get User Auth Headers</button>
+            </div>
+        </div>
+
+        <!-- Cookies Tests -->
+        <div class="col-md-12" style="margin-top:20px;">
+            <div class="card card-block">
+                <h4>Cookies Tests</h4>
+                <button class="btn btn-secondary test-button" (click)="getTokenFromCookie()">Get Token From Cookies</button>
+                <button class="btn btn-secondary test-button" (click)="putTokenInCookie()">Put Token In Cookies</button>
+                <button class="btn btn-secondary test-button" (click)="removeTokenFromCookie()">Remove Token From Cookies</button>
+            </div>
+        </div>
+
+
     </div>
 
-    <!-- Outputs -->
+    <!-- Output Pane -->
     <div class="col-md-8">
         <div class="card card-block output-card">
             <div *ngIf="loading" style="margin:auto">
