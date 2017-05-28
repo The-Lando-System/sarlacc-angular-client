@@ -1,6 +1,6 @@
 {
   "name": "sarlacc-angular-client",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Sarlacc Angular Client",
   "main": "bundles/sarlacc-client.umd.js",
   "module": "index.js",
