@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+import { Broadcaster } from '../src/broadcaster';
 import { UserService } from '../src/user.service';
 import { User } from '../src/user';
 import { Token } from '../src/token';
@@ -20,11 +21,14 @@ export class TestComponent implements OnInit {
   private creds:any = {};
 
   constructor(
-    private userService: UserService
+    private userService: UserService,
+    private bcaster: Broadcaster
   ){}
 
   ngOnInit(): void {
     this.logout();
+    this.listenForMessages();
+    this.listenForMessagesMultiKey();
   }
 
   // Public Methods =================================================
@@ -130,6 +134,34 @@ export class TestComponent implements OnInit {
     this.getTokenFromCookie();
   }
 
+
+  broadcastMessage1(): void {
+    this.bcaster.broadcast('KEY_1',{'KEY_1':'hello world 1!'});
+  }
+
+  broadcastMessage2(): void {
+    this.bcaster.broadcast('KEY_2',{'KEY_2':'hello world 2!'});
+  }
+
+  broadcastMessage3(): void {
+    this.bcaster.broadcast('KEY_3',{'KEY_3':'hello world 3!'});
+  }
+
+  listenForMessages(): void {
+    this.bcaster.on<any>('KEY_1')
+    .subscribe(message => {
+      this.outputTitle = 'Received Single Key Broadcast Message:'
+      this.outputData = JSON.stringify(message, null, '  ');
+    });
+  }
+
+  listenForMessagesMultiKey(): void {
+    this.bcaster.onAny<any>(['KEY_2','KEY_3'])
+    .subscribe(message => {
+      this.outputTitle = 'Received Multi Key Broadcast Message:'
+      this.outputData = JSON.stringify(message, null, '  ');
+    });
+  }
 
   // Private Methods =========================================
 

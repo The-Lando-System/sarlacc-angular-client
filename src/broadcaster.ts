@@ -24,4 +24,10 @@ export class Broadcaster {
       .filter(event => event.key === key)
       .map(event => <T>event.data);
   }
+
+  onAny<T>(keys: any[]): Observable<T> {
+    return this._eventBus.asObservable()
+      .filter(event => keys.includes(event.key))
+      .map(event => <T>event.data);
+  }
 }

@@ -35,11 +35,11 @@
                 <button class="btn btn-secondary test-button" (click)="getAppRoles()">Get All App Roles</button>
                 <div class="input-group spacer">
                     <span class="input-group-btn">
-                        <button (click)="getRoleForApp(appName)" class="btn btn-secondary" type="button">Get Role For App</button>
+                        <button (click)="getRoleForApp(appName)" class="btn btn-secondary" type="button">App Role</button>
                     </span>
                     <input type="text" class="form-control" placeholder="App Name" [(ngModel)]="appName" name="appName">
                     <span class="input-group-btn">
-                        <button (click)="isAdminForApp(appName)" class="btn btn-secondary" type="button">Is Admin?</button>
+                        <button (click)="isAdminForApp(appName)" class="btn btn-secondary" type="button">Admin?</button>
                     </span>
                 </div>
             </div>
@@ -61,6 +61,16 @@
                 <button class="btn btn-secondary test-button" (click)="getTokenFromCookie()">Get Token From Cookies</button>
                 <button class="btn btn-secondary test-button" (click)="putTokenInCookie()">Put Token In Cookies</button>
                 <button class="btn btn-secondary test-button" (click)="removeTokenFromCookie()">Remove Token From Cookies</button>
+            </div>
+        </div>
+
+        <!-- Broadcast Tests -->
+        <div class="col-md-12" style="margin-top:20px;">
+            <div class="card card-block">
+                <h4>Broadcast Tests</h4>
+                <button class="btn btn-secondary test-button" (click)="broadcastMessage1()">Broadcast Key 1</button>
+                <button class="btn btn-secondary test-button" (click)="broadcastMessage2()">Broadcast Key 2</button>
+                <button class="btn btn-secondary test-button" (click)="broadcastMessage3()">Broadcast Key 3</button>
             </div>
         </div>
 
